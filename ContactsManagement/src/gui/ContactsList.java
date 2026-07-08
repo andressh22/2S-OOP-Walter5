@@ -1,42 +1,41 @@
-
 package gui;
 
 import contactsmanagement.*;
 import java.awt.Color;
 import javax.swing.JPanel;
 
-
 public class ContactsList extends javax.swing.JFrame {
-    
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ContactsList.class.getName());
 
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ContactsList.class.getName());
 
     public ContactsList() {
         initComponents();
         showContactsList();
-    }   
-    
-            
-        
-        
-        
-    private void showContactsList(){
-        ContactPanelsContainer.removeAll();/*para recargar el contenedor de los contactos debo eliminar todo*/
-        ContactPanelsContainer.setLayout(new java.awt.GridLayout(0, 1, 0, 10));/*Para que se vean los contactos*/
-        String[] arregloPrueba = {"Juan", "María", "Carlos", "Diana"};/*Array*/
-        
-      if (arregloPrueba.length==0){
-          LabelNoContacts.setVisible(true);/*si no hay nada muestra el mensaje de aun no hay contactos*/
-      }else{
-          for(String name:arregloPrueba){/*ir contacto por contacto*/
-                ContactPanel contactPanel=new ContactPanel();
-                contactPanel.setPanelData(name);
-                ContactPanelsContainer.add(contactPanel);/*se anade el panel que nace de una clase separada 'ContactPanel'*/
+    }
+
+    void showContactsList() { //ARREGLO
+
+        ContactPanelsContainer.removeAll();
+
+        ContactPanelsContainer.setLayout(new java.awt.GridLayout(0, 1, 0, 10));
+
+        java.util.ArrayList<contactsmanagement.Contact> listaReal = contactsmanagement.ContactsManagement.getContacts();
+
+        if (listaReal.isEmpty()) {
+            LabelNoContacts.setVisible(true);
+
+        } else {
+            LabelNoContacts.setVisible(false);
+            for (contactsmanagement.Contact con : listaReal) {
+
+                ContactPanel contactPanel = new ContactPanel();
+                contactPanel.setPanelData(con);
+                ContactPanelsContainer.add(contactPanel);
+
             }
         }
-        ContactPanelsContainer.revalidate(); /*Para terminar de recargarlo le vuelvo a poner sus valores*/
+        ContactPanelsContainer.revalidate();
         ContactPanelsContainer.repaint();
-
     }
 
     @SuppressWarnings("unchecked")
@@ -174,12 +173,11 @@ public class ContactsList extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        AddContact addContact = new AddContact(this);
+        addContact.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
-
     public static void main(String args[]) {
-
 
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -191,8 +189,6 @@ public class ContactsList extends javax.swing.JFrame {
         } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
-
-
 
         java.awt.EventQueue.invokeLater(() -> new ContactsList().setVisible(true));
     }
@@ -209,4 +205,3 @@ public class ContactsList extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }
-

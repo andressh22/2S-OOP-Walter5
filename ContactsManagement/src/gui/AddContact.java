@@ -1,15 +1,16 @@
-
 package gui;
 
+import contactsmanagement.Contact;
 
 public class AddContact extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AddContact.class.getName());
 
-    public AddContact() {
+    public AddContact(ContactsList ventanaPrincipal) {
+        this.ventanaPrincipal = ventanaPrincipal;
         initComponents();
     }
-
+    private ContactsList ventanaPrincipal;
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -19,13 +20,13 @@ public class AddContact extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        NombreContacto = new javax.swing.JTextField();
+        NumeroContacto = new javax.swing.JTextField();
+        CrearContacto = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(101, 153, 255));
 
@@ -38,12 +39,9 @@ public class AddContact extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(0, 0, 102));
         jLabel2.setText("NUEVO CONTACTO");
 
-        jTextField1.setText("");
-
-        jTextField2.setText("");
-
-        jButton1.setFont(new java.awt.Font("Caladea", 1, 14)); // NOI18N
-        jButton1.setText("Crear contacto");
+        CrearContacto.setFont(new java.awt.Font("Caladea", 1, 14)); // NOI18N
+        CrearContacto.setText("Crear Contacto");
+        CrearContacto.addActionListener(this::CrearContactoActionPerformed);
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 102));
@@ -58,18 +56,19 @@ public class AddContact extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTextField1)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4)
-                    .addComponent(jTextField2))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(17, 17, 17)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(NombreContacto)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4)
+                            .addComponent(NumeroContacto)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(63, 63, 63)
+                        .addComponent(CrearContacto)))
                 .addContainerGap(26, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(67, 67, 67))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -79,13 +78,13 @@ public class AddContact extends javax.swing.JFrame {
                 .addGap(34, 34, 34)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(NombreContacto, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(NumeroContacto, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(CrearContacto, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(38, Short.MAX_VALUE))
         );
 
@@ -128,12 +127,41 @@ public class AddContact extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void CrearContactoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CrearContactoActionPerformed
+        String nombreIngresado = NombreContacto.getText().trim();
+        String numeroIngresado = NumeroContacto.getText().trim();
+
+        if (nombreIngresado.isEmpty() || numeroIngresado.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Error: Todos los campos son obligatorios.",
+                    "Campos Vacíos",
+                    javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (!numeroIngresado.matches("\\d+")) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Error: El campo de teléfono solo debe contener números.",
+                    "Formato Incorrecto",
+                    javax.swing.JOptionPane.ERROR_MESSAGE);
+            return; // Detiene la ejecución
+        }
+
+        Contact nuevoContacto = new Contact(nombreIngresado, numeroIngresado);
+        contactsmanagement.ContactsManagement.addContact(nuevoContacto);
+
+        if (ventanaPrincipal != null) {
+            ventanaPrincipal.showContactsList();
+        }
+
+        this.dispose();
+    }//GEN-LAST:event_CrearContactoActionPerformed
 
     public static void main(String args[]) {
 
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -147,19 +175,18 @@ public class AddContact extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-
-        java.awt.EventQueue.invokeLater(() -> new AddContact().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new AddContact(null).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton CrearContacto;
+    private javax.swing.JTextField NombreContacto;
+    private javax.swing.JTextField NumeroContacto;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 }

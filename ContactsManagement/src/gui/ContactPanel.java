@@ -1,47 +1,49 @@
-
 package gui;
 
+import contactsmanagement.Contact;
 
 public class ContactPanel extends javax.swing.JPanel {
 
+    private Contact contactoActual;
 
     public ContactPanel() {
         initComponents();
 
     }
 
-    public void setPanelData(String name/*, String number*/){
-        this.LabelContactName.setText(name);
-        /*this.LabelContactNumber.setText(number);*/
+    public void setPanelData(Contact contacto) {
+        this.contactoActual = contacto;
+        Nombre.setText(contacto.getNombre());
+        Numero.setText(contacto.getNumero());
     }
-    
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         ContactContainer = new javax.swing.JPanel();
-        LabelContactName = new javax.swing.JLabel();
-        LabelContactNumber = new javax.swing.JLabel();
-        ButtonEditContact = new javax.swing.JButton();
-        ButtonDeleteContact = new javax.swing.JButton();
+        Nombre = new javax.swing.JLabel();
+        Numero = new javax.swing.JLabel();
+        Editar = new javax.swing.JButton();
+        Eliminar = new javax.swing.JButton();
 
         ContactContainer.setBackground(new java.awt.Color(255, 227, 85));
         ContactContainer.setPreferredSize(new java.awt.Dimension(244, 86));
 
-        LabelContactName.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        LabelContactName.setForeground(new java.awt.Color(0, 0, 102));
-        LabelContactName.setText("Cristo");
+        Nombre.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        Nombre.setForeground(new java.awt.Color(0, 0, 102));
+        Nombre.setText("Cristo");
 
-        LabelContactNumber.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        LabelContactNumber.setForeground(new java.awt.Color(0, 0, 102));
-        LabelContactNumber.setText("301 295865489");
+        Numero.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Numero.setForeground(new java.awt.Color(0, 0, 102));
+        Numero.setText("301 295865489");
 
-        ButtonEditContact.setText("Editar");
-        ButtonEditContact.setMinimumSize(new java.awt.Dimension(77, 27));
+        Editar.setText("Editar");
+        Editar.setMinimumSize(new java.awt.Dimension(77, 27));
+        Editar.addActionListener(this::EditarActionPerformed);
 
-        ButtonDeleteContact.setText("Eliminar");
-        ButtonDeleteContact.addActionListener(this::ButtonDeleteContactActionPerformed);
+        Eliminar.setText("Eliminar");
+        Eliminar.addActionListener(this::EliminarActionPerformed);
 
         javax.swing.GroupLayout ContactContainerLayout = new javax.swing.GroupLayout(ContactContainer);
         ContactContainer.setLayout(ContactContainerLayout);
@@ -51,14 +53,14 @@ public class ContactPanel extends javax.swing.JPanel {
                 .addGap(14, 14, 14)
                 .addGroup(ContactContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(ContactContainerLayout.createSequentialGroup()
-                        .addComponent(LabelContactNumber)
+                        .addComponent(Numero)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(ContactContainerLayout.createSequentialGroup()
-                        .addComponent(LabelContactName)
+                        .addComponent(Nombre)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 150, Short.MAX_VALUE)
-                        .addComponent(ButtonEditContact, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(Editar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(ButtonDeleteContact)
+                        .addComponent(Eliminar)
                         .addGap(16, 16, 16))))
         );
         ContactContainerLayout.setVerticalGroup(
@@ -66,11 +68,11 @@ public class ContactPanel extends javax.swing.JPanel {
             .addGroup(ContactContainerLayout.createSequentialGroup()
                 .addGap(12, 12, 12)
                 .addGroup(ContactContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(LabelContactName)
-                    .addComponent(ButtonEditContact, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(ButtonDeleteContact))
+                    .addComponent(Nombre)
+                    .addComponent(Editar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Eliminar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(LabelContactNumber)
+                .addComponent(Numero)
                 .addContainerGap(19, Short.MAX_VALUE))
         );
 
@@ -90,16 +92,72 @@ public class ContactPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void ButtonDeleteContactActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonDeleteContactActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ButtonDeleteContactActionPerformed
+    private void EliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarActionPerformed
+        if (contactoActual != null) {
+            int confirmacion = javax.swing.JOptionPane.showConfirmDialog(
+                    this,
+                    "¿Seguro que deseas eliminar a " + contactoActual.getNombre() + "?",
+                    "Confirmar Eliminación",
+                    javax.swing.JOptionPane.YES_NO_OPTION
+            );
 
+            if (confirmacion == javax.swing.JOptionPane.YES_OPTION) {
+
+                contactsmanagement.ContactsManagement.deleteContact(contactoActual.getNombre());
+
+                java.awt.Window win = javax.swing.SwingUtilities.getWindowAncestor(this);
+                if (win instanceof ContactsList) {
+                    ((ContactsList) win).showContactsList();
+                }
+            }
+        }
+    }//GEN-LAST:event_EliminarActionPerformed
+
+    private void EditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditarActionPerformed
+        if (contactoActual != null) {
+
+            String nuevoNombre = javax.swing.JOptionPane.showInputDialog(this, "Editar Nombre:", contactoActual.getNombre());
+            if (nuevoNombre == null) {
+                return;
+            }
+            nuevoNombre = nuevoNombre.trim();
+
+            if (nuevoNombre.isEmpty()) {
+                javax.swing.JOptionPane.showMessageDialog(this, "El nombre no puede estar vacío.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            String nuevoNumero = javax.swing.JOptionPane.showInputDialog(this, "Editar Teléfono (Solo números):", contactoActual.getNumero());
+            if (nuevoNumero == null) {
+
+            }
+            nuevoNumero = nuevoNumero.trim();
+
+            if (nuevoNumero.isEmpty()) {
+                javax.swing.JOptionPane.showMessageDialog(this, "El teléfono no puede estar vacío.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (!nuevoNumero.matches("\\d+")) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Error: El teléfono debe contener únicamente números.", "Formato Incorrecto", javax.swing.JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            Contact contactoEditado = new Contact(nuevoNombre, nuevoNumero);
+            contactsmanagement.ContactsManagement.updateContact(contactoActual.getNombre(), contactoEditado);
+
+            java.awt.Window win = javax.swing.SwingUtilities.getWindowAncestor(this);
+            if (win instanceof ContactsList) {
+                ((ContactsList) win).showContactsList();
+            }
+        }
+    }//GEN-LAST:event_EditarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton ButtonDeleteContact;
-    private javax.swing.JButton ButtonEditContact;
     private javax.swing.JPanel ContactContainer;
-    private javax.swing.JLabel LabelContactName;
-    private javax.swing.JLabel LabelContactNumber;
+    private javax.swing.JButton Editar;
+    private javax.swing.JButton Eliminar;
+    private javax.swing.JLabel Nombre;
+    private javax.swing.JLabel Numero;
     // End of variables declaration//GEN-END:variables
 }
