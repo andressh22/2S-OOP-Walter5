@@ -42,6 +42,71 @@ public class ContactsManagement {
         return list;
     }
 
+    public static void deleteContact(String nombreBorrar) {
+        try {
+            File file = new File(FILE_NAME);
+            if (!file.exists()) {
+                return;
+            }
+
+            RandomAccessFile raf = new RandomAccessFile(file, "rw");
+            ArrayList<String> lineasGuardar = new ArrayList<>();
+
+            // Leer todas las líneas excepto la que vamos a borrar
+            while (raf.getFilePointer() < raf.length()) {
+                String linea = raf.readLine();
+                String[] split = linea.split("!");
+                if (!split[0].equals(nombreBorrar)) {
+                    lineasGuardar.add(linea);
+                }
+            }
+
+            // Limpiar el archivo y reescribir
+            raf.setLength(0);
+            for (String l : lineasGuardar) {
+                raf.writeBytes(l + System.lineSeparator());
+            }
+            raf.close();
+            javax.swing.JOptionPane.showMessageDialog(null, "Contacto Eliminado");
+        } catch (IOException e) {
+            System.out.println("Error al eliminar: " + e.getMessage());
+        }
+    }
+
+    public static void updateContact(String nombreViejo, Contact contactoEditado) {
+        try {
+            File file = new File(FILE_NAME);
+            if (!file.exists()) {
+                return;
+            }
+
+            RandomAccessFile raf = new RandomAccessFile(file, "rw");
+            ArrayList<String> lineasGuardar = new ArrayList<>();
+
+            // Leer y reemplazar los datos del contacto viejo
+            while (raf.getFilePointer() < raf.length()) {
+                String linea = raf.readLine();
+                String[] split = linea.split("!");
+                if (split[0].equals(nombreViejo)) {
+                    // Metemos los datos nuevos
+                    lineasGuardar.add(contactoEditado.getNombre() + "!" + contactoEditado.getNumero());
+                } else {
+                    lineasGuardar.add(linea);
+                }
+            }
+
+            // Limpiar y reescribir
+            raf.setLength(0);
+            for (String l : lineasGuardar) {
+                raf.writeBytes(l + System.lineSeparator());
+            }
+            raf.close();
+            javax.swing.JOptionPane.showMessageDialog(null, "Contacto Actualizado");
+        } catch (IOException e) {
+            System.out.println("Error al editar: " + e.getMessage());
+        }
+    }
+
     public static void addContact(Contact newContact) {
         try {
             File file = new File(FILE_NAME);
