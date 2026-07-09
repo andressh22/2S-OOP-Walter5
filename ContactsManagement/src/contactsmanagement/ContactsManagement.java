@@ -10,7 +10,7 @@ public class ContactsManagement {
     private static final String FILE_NAME = "friendsContact.txt";
 
     public static ArrayList<Contact> getContacts() {
-        ArrayList<Contact> list = new ArrayList<>();
+            ArrayList<Contact> list = new ArrayList<>();
 
         try {
             File file = new File(FILE_NAME);
@@ -148,5 +148,25 @@ public class ContactsManagement {
             System.out.println("Error al manejar el archivo: " + e.getMessage());
         }
     }
+    
+        public static boolean checkVariableSize(String data){
+        try{
+            Long.parseLong(data);
+            if(data.length() >10){
+                return false;
+            }else{
+                return true;
+            }
+                
+            }catch(NumberFormatException e){
+                if(data.length() >17){
+                    return false;
+                }else{
+                    return true;
+                }
+                
+            }
+        }
+        
 
 }

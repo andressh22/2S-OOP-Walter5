@@ -1,6 +1,7 @@
 package gui;
 
 import contactsmanagement.Contact;
+import contactsmanagement.ContactsManagement;
 
 public class AddContact extends javax.swing.JFrame {
 
@@ -128,9 +129,18 @@ public class AddContact extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void CrearContactoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CrearContactoActionPerformed
+
         String nombreIngresado = NombreContacto.getText().trim();
         String numeroIngresado = NumeroContacto.getText().trim();
-
+        
+        if(!ContactsManagement.checkVariableSize(nombreIngresado) || !ContactsManagement.checkVariableSize(numeroIngresado)){
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Error: Tamaño máximo de digitos:10 . Tamaño máximo de caracteres:17",
+                    "Tamaño de cadena mayor a requerido",
+                    javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+            
         if (nombreIngresado.isEmpty() || numeroIngresado.isEmpty()) {
             javax.swing.JOptionPane.showMessageDialog(this,
                     "Error: Todos los campos son obligatorios.",

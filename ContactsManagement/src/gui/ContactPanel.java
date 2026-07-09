@@ -1,6 +1,7 @@
 package gui;
 
 import contactsmanagement.Contact;
+import contactsmanagement.ContactsManagement;
 
 public class ContactPanel extends javax.swing.JPanel {
 
@@ -142,6 +143,14 @@ public class ContactPanel extends javax.swing.JPanel {
                 javax.swing.JOptionPane.showMessageDialog(this, "Error: El teléfono debe contener únicamente números.", "Formato Incorrecto", javax.swing.JOptionPane.ERROR_MESSAGE);
                 return;
             }
+            
+            if(!ContactsManagement.checkVariableSize(nuevoNombre) || !ContactsManagement.checkVariableSize(nuevoNumero)){
+                javax.swing.JOptionPane.showMessageDialog(this,
+                    "Error: Tamaño máximo de digitos:10 . Tamaño máximo de caracteres:17",
+                    "Tamaño de cadena mayor a requerido",
+                    javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
             Contact contactoEditado = new Contact(nuevoNombre, nuevoNumero);
             contactsmanagement.ContactsManagement.updateContact(contactoActual.getNombre(), contactoEditado);
